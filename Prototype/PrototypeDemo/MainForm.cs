@@ -9,9 +9,14 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 
+// Подключаем библиотеку Prototype
 using Prototype.Core;
 using Prototype.Math;
 using Prototype.Render;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////// ПРОГРАММА В СТАДИИ РАЗРАБОТКИ, АВТОР НЕ ВЕДАЕТ ЧТО ТВОРИТ :) ////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 namespace PrototypeDemo
 {
@@ -32,14 +37,17 @@ namespace PrototypeDemo
             Clear();
         }
 
-        private void ViewPanel_Paint(object sender, PaintEventArgs e)
+        private void MainForm_Paint(object sender, PaintEventArgs e)
         {
-            Render((Control)sender, e.Graphics);
-        }
+            // РИСУЮ НА ФОРМЕ ТАК-КАК ОНА ИМЕЕТ ДВОЙНУЮ БУФЕРИЗАЦИЮ
+            // Зато не мерцает при анимации
+            Render(e.Graphics);
+        }  
 
         private void timer_Tick(object sender, EventArgs e)
         {
-            Update();
+            // Обновление формы
+            UpdateScene();
         }
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -68,52 +76,79 @@ namespace PrototypeDemo
             matrix1.Rotate(45, 0 , 0);
             matrix1.SetIdentity();
 
+            m_Render = new Render(this);
+
+            // Тот самый зеленый квадратик
             m_Polygon = new Vector2[]{
                 new Vector2(10, 200), new Vector2(400, 200),
                 new Vector2(400, 400), new Vector2(10, 400)
             };
 
+            // Настройки таймера
             timer.Enabled = true;
             timer.Interval = 60;
         }
 
-        public void Update()
+        public void UpdateScene()
         {
-            if (m_PositionX > 300) m_PositionX = 10;
+            // Расчет значений для анимации
+            if (m_PositionX >= 380) m_PositionX = 0;
 
             m_PositionX += 10;
 
-            ViewPanel.Invalidate();
+            // Обновление формы, делает ее не действительной
+            this.Invalidate();
         }
 
-        public void Render(Control context, Graphics graphics)
+        public void Render(Graphics graphics)
         {
+            ///////////////////////////////////////////////////////////////////////
+            // //////////////  ТЕСТ ДВУХМЕРНОЙ ГРАФИКИ И ПРЕОБРАЗОВАНИЙ ///////////
+            ///////////////////////////////////////////////////////////////////////
+
+            m_Render.BeginScene(Color.SteelBlue, graphics);
+            
+            // Вывод текста шрифтом: Times New Roman 14pt
+            m_Render.DrawText("Hello, World!", 10, 10, Color.White, 14);
+
             m_World = new Matrix3x3();
             m_World.SetIdentity();
 
+            // New_Position = Matrix_World * Old_Position
+            Matrix3x3 matrixScale = new Matrix3x3();
+            matrixScale.SetIdentity();
+
+            // Масштабирование красной линии
+            m_World.Scale(new Vector2(10, 10));
+
+            // Перемещение красной линии
             m_World.Translate(new Vector2(m_PositionX, 0));
 
-            Render render = new Render(context, graphics);
+            // m_World = m_World * matrixScale;
+            m_Render.SetTransform(m_World);
 
-            render.BeginScene(Color.SteelBlue);
-            render.SetTransform(m_World);
+            // Draw Line with scale size, for test only :)
+            // Modify m_Render::DrawLine()
+            m_Render.DrawLine(new Vector2(10, 10), new Vector2(10, 200), Color.Red, 10);
 
-            render.DrawLine(new Vector2(10, 10), new Vector2(200, 200), Color.Red, 10);
-
+            // Сброс мировой матрицы
             m_World.SetIdentity();
-            render.SetTransform(m_World);
-            render.DrawFillPolygon(m_Polygon, Color.Green);
 
-            render.EndScene();
+            m_Render.SetTransform(m_World);
+            m_Render.DrawFillPolygon(m_Polygon, Color.Green);
+
+            // Конец сцены, выводим все из буфера графики на форму
+            m_Render.EndScene();
         }
 
         public void Clear()
         {
-
+            // Освобождение и ресурсов перед закрытием окна
         }
 
         private Vector2[] m_Polygon;
         private Matrix3x3 m_World;
-        private double m_PositionX = 10;  
+        private double m_PositionX = 0;
+        private Render m_Render;
     }
 }

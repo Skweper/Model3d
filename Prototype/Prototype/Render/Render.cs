@@ -12,13 +12,14 @@ namespace Prototype.Render
 {
     public class Render
     {
-        public Render(Control context, Graphics g)
+        public Render(Control context)
         {
-            m_Graphics = g;
             m_Context = context;
 
             Matrix2D = new Matrix3x3();
             Matrix3D = new Matrix4x4();
+
+            m_DoubleBuffer = new BufferedGraphicsContext(); 
         }
 
         public void SetTransform(Matrix3x3 matrix)
@@ -31,14 +32,25 @@ namespace Prototype.Render
             Matrix3D = matrix;
         }
 
-        public void BeginScene(Color clearColor)
+        public void BeginScene(Color clearColor, Graphics graphics)
         {
-            m_Context.BackColor = clearColor;
+            m_BufferGraphics = m_DoubleBuffer.Allocate(graphics, new Rectangle(0, 0, m_Context.Width, m_Context.Height));
+            m_BufferGraphics.Graphics.Clear(clearColor);
         }
 
         public void EndScene()
         {
-            // Освобождение занятых ресурсов
+            m_BufferGraphics.Render();
+        }
+
+        public void DrawText(string text, Vector2 v, Color color, double size)
+        {
+            m_BufferGraphics.Graphics.DrawString(text, new Font("Times New Roman", (float)size), new SolidBrush(color), (float)v.X, (float)v.Y);
+        }
+
+        public void DrawText(string text, double x, double y, Color color, double size)
+        {
+            m_BufferGraphics.Graphics.DrawString(text, new Font("Times New Roman", (float)size), new SolidBrush(color), (float)x, (float)y);
         }
 
         public void DrawPolygon(Vector2[] v, Color color, float width = 1)
@@ -51,7 +63,7 @@ namespace Prototype.Render
                 points[i] = new PointF((float)v[i].X, (float)v[i].Y);
             }
 
-            m_Graphics.DrawPolygon(new Pen(color, width), points);
+            m_BufferGraphics.Graphics.DrawPolygon(new Pen(color, width), points);
         }
 
         public void DrawFillPolygon(Vector2[] v, Color color)
@@ -64,7 +76,7 @@ namespace Prototype.Render
                 points[i] = new PointF((float)v[i].X, (float)v[i].Y);
             }
             
-            m_Graphics.FillPolygon(new SolidBrush(color), points);
+            m_BufferGraphics.Graphics.FillPolygon(new SolidBrush(color), points);
         }
 
         public void DrawLine(Vector2 v1, Vector2 v2, Color color, float width = 1)
@@ -72,7 +84,24 @@ namespace Prototype.Render
             v1 = Matrix2D * v1;
             v2 = Matrix2D * v2;
 
-            m_Graphics.DrawLine(new Pen(color, width), (float)v1.X, (float)v1.Y, (float)v2.X, (float)v2.Y);
+            // m_BufferGraphics.Graphics.DrawLine(new Pen(color, width), (float)v1.X, (float)v1.Y, (float)v2.X, (float)v2.Y);
+
+            // Draw Line with scale size, for test only :)
+            m_BufferGraphics.Graphics.DrawLine(new Pen(color, width * (float)Matrix2D[0]), (float)v1.X, (float)v1.Y, (float)v2.X, (float)v2.Y);
+        }
+
+        public void DrawLine(double x1, double x2, double y1, double y2, Color color, float width = 1)
+        {
+            Vector2 v1 = new Vector2(x1, x2);
+            Vector2 v2 = new Vector2(y1, y2);
+
+            v1 = Matrix2D * v1;
+            v2 = Matrix2D * v2;
+
+            // m_BufferGraphics.Graphics.DrawLine(new Pen(color, width), (float)v1.X, (float)v1.Y, (float)v2.X, (float)v2.Y);
+
+            // Draw Line with scale size, for test only :)
+            m_BufferGraphics.Graphics.DrawLine(new Pen(color, width * (float)Matrix2D[0]), (float)v1.X, (float)v1.Y, (float)v2.X, (float)v2.Y);
         }
 
         public void DrawLines(Vector2[] v, Color color, float width = 1)
@@ -85,13 +114,14 @@ namespace Prototype.Render
                 points[i] = new PointF((float)v[i].X, (float)v[i].Y);
             }
 
-            m_Graphics.DrawLines(new Pen(color, width), points);
+            m_BufferGraphics.Graphics.DrawLines(new Pen(color, width), points);
         }
 
         public Matrix3x3 Matrix2D { get; set; }
         public Matrix4x4 Matrix3D { get; set; }
 
-        private Graphics m_Graphics;
+        private BufferedGraphics m_BufferGraphics;
+        private BufferedGraphicsContext m_DoubleBuffer;
         private Control m_Context;
     }
 }

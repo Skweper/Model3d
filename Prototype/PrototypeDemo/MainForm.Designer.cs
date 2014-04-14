@@ -29,19 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.ViewPanel = new System.Windows.Forms.Panel();
             this.timer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
-            // 
-            // ViewPanel
-            // 
-            this.ViewPanel.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.ViewPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.ViewPanel.Location = new System.Drawing.Point(0, 0);
-            this.ViewPanel.Name = "ViewPanel";
-            this.ViewPanel.Size = new System.Drawing.Size(515, 471);
-            this.ViewPanel.TabIndex = 0;
-            this.ViewPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.ViewPanel_Paint);
             // 
             // timer
             // 
@@ -54,7 +43,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gainsboro;
             this.ClientSize = new System.Drawing.Size(784, 470);
-            this.Controls.Add(this.ViewPanel);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.MaximizeBox = false;
@@ -65,13 +53,13 @@
             this.Text = "Prototype Demo";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.MainForm_Paint);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Panel ViewPanel;
         private System.Windows.Forms.Timer timer;
 
     }
