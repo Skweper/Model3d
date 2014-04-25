@@ -1,4 +1,4 @@
-Ôªøusing System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -157,6 +157,7 @@ namespace Prototype.Math
             return result;
         }
 
+// »—œ–¿¬»“‹ ”ÃÕŒ∆≈Õ»≈
         public static Matrix4x4 operator *(Matrix4x4 m1, Matrix4x4 m2)
         {
             Matrix4x4 result = new Matrix4x4();
