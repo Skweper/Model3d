@@ -97,12 +97,6 @@ namespace PrototypeDemo
 
             m_Render = new Render(this);
 
-            // Тот самый зеленый квадратик
-            m_Polygon = new Vector2[]{
-                new Vector2(10, 200), new Vector2(400, 200),
-                new Vector2(400, 400), new Vector2(10, 400)
-            };
-
             // Настройки таймера
             timer.Enabled = true;
             timer.Interval = 60;
@@ -110,13 +104,6 @@ namespace PrototypeDemo
 
         public void UpdateScene()
         {
-            // Расчет значений для анимации
-            if (m_PositionX >= 380)
-            {
-                m_PositionX = 0;
-            }
-
-            m_PositionX += 10;
 
             // Обновление формы, делает ее не действительной
             this.Invalidate();
@@ -127,37 +114,43 @@ namespace PrototypeDemo
             ///////////////////////////////////////////////////////////////////////
             // //////////////  ТЕСТ ДВУХМЕРНОЙ ГРАФИКИ И ПРЕОБРАЗОВАНИЙ ///////////
             ///////////////////////////////////////////////////////////////////////
+            m_Polygon1 = new Vector3[]{
+                new Vector3(10, 200, 0), new Vector3(400, 200, 0),
+                new Vector3(400, 400, 0), new Vector3(10, 400, 0)
+            };
+
+            m_Polygon2 = new Vector3[]{
+                new Vector3(10, 200, 10), new Vector3(400, 200, 10),
+                new Vector3(400, 400, 10), new Vector3(10, 400, 10)
+            };
 
             m_Render.BeginScene(Color.SteelBlue, graphics);
             
             // Вывод текста шрифтом: Times New Roman 14pt
             m_Render.DrawText("Hello, World!", 10, 10, Color.White, 14);
 
-            m_World = new Matrix3x3();
+            m_World = new Matrix4x4();
             m_World.SetIdentity();
 
-            // New_Position = Matrix_World * Old_Position
-            Matrix3x3 matrixScale = new Matrix3x3();
-            matrixScale.SetIdentity();
+            Matrix4x4 perspective = new Matrix4x4();
+            perspective.SetPerspective(this.Width, this.Height, 90, 1, 1000);
 
-            // Масштабирование красной линии
-            m_World.Scale(new Vector2(10, 10));
+            Matrix4x4 translate = new Matrix4x4();
+            translate.Translate(new Vector3(0, 0, 5));
 
-            // Перемещение красной линии
-            m_World.Translate(new Vector2(m_PositionX, 0));
-
-            // m_World = m_World * matrixScale;
             m_Render.SetTransform(m_World);
 
-            // Draw Line with scale size, for test only :)
-            // Modify m_Render::DrawLine()
-            m_Render.DrawLine(new Vector2(10, 10), new Vector2(10, 200), Color.Red, 10);
+            // Рисование полигона
+            m_Render.DrawPolygon(m_Polygon2, Color.Red, 2);
 
-            // Сброс мировой матрицы
             m_World.SetIdentity();
+            translate.Translate(new Vector3(-300, -100, 5));
+            m_World = m_World * perspective * translate;
+
 
             m_Render.SetTransform(m_World);
-            m_Render.DrawFillPolygon(m_Polygon, Color.Green);
+            m_Render.DrawPolygon(m_Polygon1, Color.Blue, 4);
+
 
             // Конец сцены, выводим все из буфера графики на форму
             m_Render.EndScene();
@@ -170,9 +163,9 @@ namespace PrototypeDemo
             m_log.WriteLine("");
         }
 
-        private Vector2[] m_Polygon;
-        private Matrix3x3 m_World;
-        private double m_PositionX = 0;
+        private Vector3[] m_Polygon1;
+        private Vector3[] m_Polygon2;
+        private Matrix4x4 m_World;
         private Render m_Render;
         private Log m_log;
     }

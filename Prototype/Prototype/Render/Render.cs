@@ -60,6 +60,19 @@ namespace Prototype.Render
             m_BufferGraphics.Graphics.DrawPolygon(new Pen(color, width), points);
         }
 
+        public void DrawPolygon(Vector3[] v, Color color, float width = 1)
+        {
+            PointF[] points = new PointF[v.Length];
+
+            for (int i = 0; i < points.Length; i++)
+            {
+                v[i] = Matrix3D * v[i];
+                points[i] = new PointF(((float)v[i].X / (float)v[i].Z) + (m_Context.Width / 2), ((float)v[i].Y / (float)v[i].Z) + (m_Context.Height / 2));
+            }
+
+            m_BufferGraphics.Graphics.DrawPolygon(new Pen(color, width), points);
+        }
+
         public void DrawFillPolygon(Vector2[] v, Color color)
         {
             PointF[] points = new PointF[v.Length];

@@ -159,7 +159,6 @@ namespace Prototype.Math
             return result;
         }
 
-// »—œ–¿¬»“‹ ”ÃÕŒ∆≈Õ»≈
         public static Matrix4x4 operator *(Matrix4x4 m1, Matrix4x4 m2)
         {
             Matrix4x4 result = new Matrix4x4();
@@ -238,34 +237,34 @@ namespace Prototype.Math
 
         public void SetPerspective(int width, int height, double fov, double znear, double zfar)
         {
-            double ar = width / height;
+            double ar = (double)width / (double)height;
             double zNear = znear;
             double zFar = zfar;
-            double zRange = znear - zfar;
-            double tanHalfFOV = System.Math.Tan(System.Math.PI * fov / 360.0);
+            double zRange = zNear - zFar;
+            double tanHalfFOV = System.Math.Tan(MathHelper.ToRadian(fov / 2.0));
 
-            m_Matrix[0] = 1.0f / (tanHalfFOV * ar);
-            m_Matrix[1] = 0.0f;
-            m_Matrix[2] = 0.0f;
-            m_Matrix[3] = 0.0f;
+            this[0, 0] = 1.0f / (tanHalfFOV * ar);
+            this[0, 1] = 0.0f;
+            this[0, 2] = 0.0f;
+            this[0, 3] = 0.0f;
 
-            m_Matrix[4] = 0.0f;
-            m_Matrix[5] = 1.0f / tanHalfFOV;
-            m_Matrix[6] = 0.0f;
-            m_Matrix[7] = 0.0f;
+            this[1, 0] = 0.0f;
+            this[1, 1] = 1.0f / tanHalfFOV;
+            this[1, 2] = 0.0f;
+            this[1, 3] = 0.0f;
 
-            m_Matrix[8] = 0.0f;
-            m_Matrix[9] = 0.0f;
-            m_Matrix[10] = (-zNear - zFar) / zRange;
-            m_Matrix[11] = 2.0f * zFar * zNear / zRange;
+            this[2, 0] = 0.0f;
+            this[2, 1] = 0.0f;
+            this[2, 2] = (-zNear - zFar) / zRange;
+            this[2, 3] = 2.0f * zFar * zNear / zRange;
 
-            m_Matrix[12] = 0.0f;
-            m_Matrix[13] = 0.0f;
-            m_Matrix[14] = 1.0f;
-            m_Matrix[15] = 0.0f;
+            this[3, 0] = 0.0f;
+            this[3, 1] = 0.0f;
+            this[3, 2] = 1.0f;
+            this[3, 3] = 0.0f;
         }
 
-        void SetCamera(Vector3 position, Vector3 target, Vector3 up)
+        public void SetCamera(Vector3 position, Vector3 target, Vector3 up)
         {
             Matrix4x4 view = new Matrix4x4();
 
