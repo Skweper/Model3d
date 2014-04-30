@@ -86,28 +86,40 @@
 
         public static bool operator <(Vector2 v1, Vector2 v2)
         {
-            if (v1.Length() < v2.Length()) return true;
+            if (v1.Length() < v2.Length())
+            {
+                return true;
+            }
 
             return false;
         }
 
         public static bool operator >(Vector2 v1, Vector2 v2)
         {
-            if (v1.Length() > v2.Length()) return true;
+            if (v1.Length() > v2.Length())
+            {
+                return true;
+            }
 
             return false;
         }
 
         public static bool operator ==(Vector2 v1, Vector2 v2)
         {
-            if (v1.X == v2.X && v1.Y == v2.Y) return true;
+            if (v1.X == v2.X && v1.Y == v2.Y)
+            {
+                return true;
+            }
 
             return false;
         }
 
         public static bool operator !=(Vector2 v1, Vector2 v2)
         {
-            if (v1.X != v2.X && v1.Y != v2.Y) return true;
+            if (v1.X != v2.X && v1.Y != v2.Y)
+            {
+                return true;
+            }
 
             return false;
         }

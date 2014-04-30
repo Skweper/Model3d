@@ -111,7 +111,10 @@ namespace PrototypeDemo
         public void UpdateScene()
         {
             // Расчет значений для анимации
-            if (m_PositionX >= 380) m_PositionX = 0;
+            if (m_PositionX >= 380)
+            {
+                m_PositionX = 0;
+            }
 
             m_PositionX += 10;
 

@@ -4,7 +4,10 @@ namespace Prototype.Math
     {
         public Matrix4x4()
         {
-            if (m_Matrix == null) m_Matrix = new double[16];
+            if (m_Matrix == null)
+            {
+                m_Matrix = new double[16];
+            }
 
             SetIdentity();
         }
@@ -14,7 +17,10 @@ namespace Prototype.Math
                          double m8, double m9, double m10, double m11,
                          double m12, double m13, double m14, double m15)
         {
-            if (m_Matrix == null) m_Matrix = new double[16];
+            if (m_Matrix == null)
+            {
+                m_Matrix = new double[16];
+            }
 
             m_Matrix[0] = m0; m_Matrix[1] = m1; m_Matrix[2] = m2; m_Matrix[3] = m3;
             m_Matrix[4] = m4; m_Matrix[5] = m5; m_Matrix[6] = m6; m_Matrix[7] = m7;
@@ -31,7 +37,9 @@ namespace Prototype.Math
                     m_Matrix = new double[16];
 
                     for (int i = 0; i < m_Matrix.Length; i++)
+                    {
                         m_Matrix[i] = array[i];
+                    }
                 }
                 else
                 {
@@ -196,12 +204,21 @@ namespace Prototype.Math
         {
             get
             {
-                if (i >= 0 && i < 4 && j >= 0 && j < 4) return m_Matrix[i * 4 + j];
-                else return double.NaN;
+                if (i >= 0 && i < 4 && j >= 0 && j < 4)
+                {
+                    return m_Matrix[i * 4 + j];
+                }
+                else
+                {
+                    return double.NaN;
+                }
             }
             set
             {
-                if (i > 0 && i < 4 && j > 0 && j < 4) m_Matrix[i * 4 + j] = value;
+                if (i > 0 && i < 4 && j > 0 && j < 4)
+                {
+                    m_Matrix[i * 4 + j] = value;
+                }
             }
         }
 

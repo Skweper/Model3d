@@ -4,7 +4,10 @@
     {
         public Matrix3x3()
         {
-            if (m_Matrix == null) m_Matrix = new double[9];
+            if (m_Matrix == null)
+            {
+                m_Matrix = new double[9];
+            }
 
             SetIdentity();
         }
@@ -13,7 +16,10 @@
                          double m3, double m4, double m5, 
                          double m6, double m7, double m8)
         {
-            if (m_Matrix == null) m_Matrix = new double[9];
+            if (m_Matrix == null)
+            {
+                m_Matrix = new double[9];
+            }
 
             m_Matrix[0] = m0; m_Matrix[1] = m1; m_Matrix[2] = m2;
             m_Matrix[3] = m3; m_Matrix[4] = m4; m_Matrix[5] = m5;
@@ -29,7 +35,9 @@
                     m_Matrix = new double[9];
 
                     for (int i = 0; i < m_Matrix.Length; i++)
+                    {
                         m_Matrix[i] = array[i];
+                    }
                 }
                 else
                 {
@@ -154,12 +162,21 @@
         {
             get
             {
-                if (i >= 0 && i < 9) return m_Matrix[i];
-                else return double.NaN;
+                if (i >= 0 && i < 9)
+                {
+                    return m_Matrix[i];
+                }
+                else
+                {
+                    return double.NaN;
+                }
             }
             set
             {
-                if (i >= 0 && i < 9) m_Matrix[i] = value;
+                if (i >= 0 && i < 9)
+                {
+                    m_Matrix[i] = value;
+                }
             }
         }
 
@@ -167,19 +184,30 @@
         {
             get
             {
-                if (i >= 0 && i < 3 && j >= 0 && j < 3) return m_Matrix[i * 3 + j];
-                else return double.NaN;
+                if (i >= 0 && i < 3 && j >= 0 && j < 3)
+                {
+                    return m_Matrix[i * 3 + j];
+                }
+                else
+                {
+                    return double.NaN;
+                }
             }
             set
             {
-                if (i > 0 && i < 3 && j > 0 && j < 3) m_Matrix[i * 3 + j] = value;
+                if (i > 0 && i < 3 && j > 0 && j < 3)
+                {
+                    m_Matrix[i * 3 + j] = value;
+                }
             }
         }
 
         public void SetZeroMatrix()
         {
             for (int i = 0; i < m_Matrix.Length; i++)
+            {
                 m_Matrix[i] = 0;
+            }
         }
 
         public void SetIdentity()
