@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Prototype.Math
+﻿namespace Prototype.Math
 {
     public class Matrix3x3
     {

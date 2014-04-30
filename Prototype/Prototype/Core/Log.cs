@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.IO;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Prototype.Core
 {
@@ -17,7 +14,14 @@ namespace Prototype.Core
         public void Write(string text)
         {
             StreamWriter writer = new StreamWriter(Path, true, Encoding.GetEncoding(1251));
-            writer.WriteLine(DateTime.Now.ToShortTimeString() + "> " + text);
+            writer.Write(text);
+            writer.Close();
+        }
+
+        public void WriteLine(string text)
+        {
+            StreamWriter writer = new StreamWriter(Path, true, Encoding.GetEncoding(1251));
+            writer.WriteLine(text);
             writer.Close();
         }
 

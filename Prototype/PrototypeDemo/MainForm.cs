@@ -57,11 +57,30 @@ namespace PrototypeDemo
 
         public void Initialize()
         {
-            Log log = new Log(@"C:\Log.txt");
-            // log.Write("Some text")
+            m_log = new Log(@"C:\Log.txt");
+            m_log.WriteLine("Start: " + DateTime.Now.ToShortDateString() + "(" + DateTime.Now.ToShortTimeString() + ")");
+            m_log.WriteLine("");
 
             Matrix3x3 matrix = new Matrix3x3(1, 2, 3, 4, 5, 6, 7, 8, 9);
             matrix = matrix * matrix;
+
+            Matrix4x4 test_mul44 = new Matrix4x4();
+            for (int i = 0; i < 16; i++)
+            {
+                test_mul44[i] = i;
+            }
+
+            test_mul44 = test_mul44 * test_mul44;
+
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    m_log.Write(test_mul44[i, j] + " ");
+                }
+
+                m_log.WriteLine("");
+            }
 
             Vector3 v1 = new Vector3(1, 2, 3);
             double x = v1.ToArray()[0];
@@ -143,12 +162,15 @@ namespace PrototypeDemo
 
         public void Clear()
         {
-            // Освобождение и ресурсов перед закрытием окна
+            m_log.WriteLine("");
+            m_log.WriteLine("End: " + DateTime.Now.ToShortDateString() + "(" + DateTime.Now.ToShortTimeString() + ")");
+            m_log.WriteLine("");
         }
 
         private Vector2[] m_Polygon;
         private Matrix3x3 m_World;
         private double m_PositionX = 0;
         private Render m_Render;
+        private Log m_log;
     }
 }
