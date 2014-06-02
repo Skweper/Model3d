@@ -57,6 +57,9 @@ namespace PrototypeDemo
 
         public void Initialize()
         {
+            m_Terrain = new Terrain();
+            m_Terrain.LoadRawFile("Terrain.raw");
+            
             m_log = new Log(@"C:\Log.txt");
             m_log.WriteLine("Start: " + DateTime.Now.ToShortDateString() + "(" + DateTime.Now.ToShortTimeString() + ")");
             m_log.WriteLine("");
@@ -114,14 +117,17 @@ namespace PrototypeDemo
             ///////////////////////////////////////////////////////////////////////
             // //////////////  ТЕСТ ДВУХМЕРНОЙ ГРАФИКИ И ПРЕОБРАЗОВАНИЙ ///////////
             ///////////////////////////////////////////////////////////////////////
-            m_Polygon1 = new Vector3[]{
-                new Vector3(10, 200, 0), new Vector3(400, 200, 0),
-                new Vector3(400, 400, 0), new Vector3(10, 400, 0)
-            };
 
-            m_Polygon2 = new Vector3[]{
+            
+            m_Polygon1 = new Vector3[]{
+                new Vector3(10, 200, 5), new Vector3(400, 200, 5),
+                new Vector3(400, 400, 5), new Vector3(10, 400, 5),
                 new Vector3(10, 200, 10), new Vector3(400, 200, 10),
-                new Vector3(400, 400, 10), new Vector3(10, 400, 10)
+                new Vector3(400, 400, 10), new Vector3(10, 400, 10),
+                new Vector3(10, 200, 50), new Vector3(400, 200, 50),
+                new Vector3(400, 400, 50), new Vector3(10, 400, 50),
+                new Vector3(10, 200, 100), new Vector3(400, 200, 100),
+                new Vector3(400, 400, 100), new Vector3(10, 400, 100)
             };
 
             m_Render.BeginScene(Color.SteelBlue, graphics);
@@ -133,24 +139,17 @@ namespace PrototypeDemo
             m_World.SetIdentity();
 
             Matrix4x4 perspective = new Matrix4x4();
-            perspective.SetPerspective(this.Width, this.Height, 90, 1, 1000);
+            perspective.SetPerspective(this.Width, this.Height, 45, 1, 10000);
 
             Matrix4x4 translate = new Matrix4x4();
-            translate.Translate(new Vector3(0, 0, 5));
-
-            m_Render.SetTransform(m_World);
-
-            // Рисование полигона
-            m_Render.DrawPolygon(m_Polygon2, Color.Red, 2);
+            translate.Translate(new Vector3(1, 1, 1));
 
             m_World.SetIdentity();
-            translate.Translate(new Vector3(-300, -100, 5));
             m_World = m_World * perspective * translate;
 
-
             m_Render.SetTransform(m_World);
-            m_Render.DrawPolygon(m_Polygon1, Color.Blue, 4);
-
+            //m_Render.DrawPolygon(m_Polygon1, Color.Red, Prototype.Render.Render.RenderType.RT_QUAD);
+            m_Terrain.Render(m_Render);
 
             // Конец сцены, выводим все из буфера графики на форму
             m_Render.EndScene();
@@ -166,6 +165,7 @@ namespace PrototypeDemo
         private Vector3[] m_Polygon1;
         private Vector3[] m_Polygon2;
         private Matrix4x4 m_World;
+        private Terrain m_Terrain;
         private Render m_Render;
         private Log m_log;
     }

@@ -301,9 +301,9 @@ namespace Prototype.Math
 
         public void Translate(Vector3 v)
         {
-            m_Matrix[3] = v.X;
-            m_Matrix[7] = v.Y;
-            m_Matrix[11] = v.Z;
+            this[0, 3] = v.X;
+            this[1, 3] = v.Y;
+            this[2, 3] = v.Z;
         }
 
         public void Rotate(double angleX, double angleY, double angleZ)
